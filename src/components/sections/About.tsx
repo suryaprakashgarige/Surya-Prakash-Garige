@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
+import { MotionValue, motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 
 const STATS = [
     { value: '7+', label: 'Projects Built' },
@@ -90,8 +90,13 @@ function TiltCard() {
     const mouseY = useMotionValue(0)
     const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), { stiffness: 200, damping: 20 })
     const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 })
-    const glowX = useTransform(mouseX, [-0.5, 0.5], ['0%', '100%'])
-    const glowY = useTransform(mouseY, [-0.5, 0.5], ['0%', '100%'])
+
+    // Reactive specular highlight — derived from live mouse position
+    const specularBg = useTransform(
+        [mouseX, mouseY] as MotionValue<number>[],
+        ([x, y]: number[]) =>
+            `radial-gradient(circle at ${(x + 0.5) * 100}% ${(y + 0.5) * 100}%, rgba(59,130,246,0.15) 0%, transparent 60%)`
+    )
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (!cardRef.current) return
@@ -119,9 +124,7 @@ function TiltCard() {
             {/* Dynamic specular highlight that follows cursor */}
             <motion.div
                 className="absolute inset-0 pointer-events-none z-10 rounded-2xl"
-                style={{
-                    background: `radial-gradient(circle at ${glowX.get()} ${glowY.get()}, rgba(59,130,246,0.15) 0%, transparent 60%)`,
-                }}
+                style={{ background: specularBg }}
             />
 
             <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-accent-warm/5" />

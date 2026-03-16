@@ -8,6 +8,19 @@ import MagneticButton from '@/components/MagneticButton'
 
 const ParticleOrb = dynamic(() => import('@/components/3d/ParticleOrb'), { ssr: false })
 
+/* ─── Config ─── */
+const HERO_STATS = [
+    { value: '7+', label: 'Projects', delay: 4.0, position: 'absolute top-[28%] right-[12%] z-20' },
+    { value: '2+', label: 'Years Coding', delay: 4.2, position: 'absolute bottom-[35%] left-[8%] z-20' },
+    { value: '8+', label: 'Technologies', delay: 4.4, position: 'absolute top-[38%] left-[6%] z-20' },
+]
+
+const SOCIAL_LINKS = [
+    { icon: Github, href: 'https://github.com/suryaprakashgarige-28', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/surya-prakash-garige/', label: 'LinkedIn' },
+    { icon: Mail, href: 'mailto:suryaprakashgarige009@gmail.com', label: 'Email' },
+]
+
 /* ─── Animation Variants ─── */
 const charVariants: Variants = {
     hidden: { y: '110%', rotateX: -80, opacity: 0 },
@@ -145,24 +158,15 @@ export default function Hero() {
             </motion.div>
 
             {/* ── Floating stat badges ── */}
-            <StatBadge
-                value="7+"
-                label="Projects"
-                delay={4.0}
-                className="absolute top-[28%] right-[12%] z-20"
-            />
-            <StatBadge
-                value="2+"
-                label="Years Coding"
-                delay={4.2}
-                className="absolute bottom-[35%] left-[8%] z-20"
-            />
-            <StatBadge
-                value="8+"
-                label="Technologies"
-                delay={4.4}
-                className="absolute top-[38%] left-[6%] z-20"
-            />
+            {HERO_STATS.map((stat) => (
+                <StatBadge
+                    key={stat.label}
+                    value={stat.value}
+                    label={stat.label}
+                    delay={stat.delay}
+                    className={stat.position}
+                />
+            ))}
 
             {/* ── Main content ── */}
             <motion.div
@@ -248,11 +252,7 @@ export default function Hero() {
 
                     {/* Social icons */}
                     <div className="flex items-center gap-3">
-                        {[
-                            { icon: Github, href: 'https://github.com/suryaprakashgarige-28', label: 'GitHub' },
-                            { icon: Linkedin, href: 'https://www.linkedin.com/in/surya-prakash-garige/', label: 'LinkedIn' },
-                            { icon: Mail, href: 'mailto:suryaprakashgarige009@gmail.com', label: 'Email' },
-                        ].map(({ icon: Icon, href, label }) => (
+                        {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
                             <MagneticButton key={label} strength={0.5}>
                                 <a
                                     href={href}
