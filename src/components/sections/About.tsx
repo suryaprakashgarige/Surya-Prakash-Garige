@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { MotionValue, motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 
 const STATS = [
     { value: '7+', label: 'Projects Built' },
@@ -81,6 +81,97 @@ function StatCounter({ value, label, index }: { value: string; label: string; in
     )
 }
 
+/** 3-D tilt card driven by mouse position */
+function TiltCard() {
+    const cardRef = useRef<HTMLDivElement>(null)
+    const isInView = useInView(cardRef, { once: true })
+
+    const mouseX = useMotionValue(0)
+    const mouseY = useMotionValue(0)
+    const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), { stiffness: 200, damping: 20 })
+    const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 })
+
+    // Reactive specular highlight — derived from live mouse position
+    const specularBg = useTransform(
+        [mouseX, mouseY] as MotionValue<number>[],
+        ([x, y]: number[]) =>
+            `radial-gradient(circle at ${(x + 0.5) * 100}% ${(y + 0.5) * 100}%, rgba(59,130,246,0.15) 0%, transparent 60%)`
+    )
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return
+        const rect = cardRef.current.getBoundingClientRect()
+        mouseX.set((e.clientX - rect.left) / rect.width - 0.5)
+        mouseY.set((e.clientY - rect.top) / rect.height - 0.5)
+    }
+
+    const handleMouseLeave = () => {
+        mouseX.set(0)
+        mouseY.set(0)
+    }
+
+    return (
+        <motion.div
+            ref={cardRef}
+            className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-subtle border border-border hidden md:block cursor-default"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            style={{ rotateX, rotateY, transformStyle: 'preserve-3d', perspective: 1200 }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+        >
+            {/* Dynamic specular highlight that follows cursor */}
+            <motion.div
+                className="absolute inset-0 pointer-events-none z-10 rounded-2xl"
+                style={{ background: specularBg }}
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-accent-warm/5" />
+
+            {/* Dot-grid */}
+            <div className="absolute inset-0 dot-grid opacity-25" />
+
+            {/* Center content */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-6">
+                {/* Animated rings */}
+                <div className="relative w-32 h-32 flex items-center justify-center">
+                    <motion.div
+                        className="absolute inset-0 rounded-full border border-accent/20"
+                        animate={{ scale: [1, 1.12, 1], opacity: [0.4, 0.8, 0.4] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                    <motion.div
+                        className="absolute inset-4 rounded-full border border-accent/30"
+                        animate={{ scale: [1, 1.08, 1], opacity: [0.6, 1, 0.6] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+                    />
+                    <div className="w-14 h-14 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center shadow-[0_0_30px_-4px_var(--accent)]">
+                        <span className="text-2xl">✈️</span>
+                    </div>
+                </div>
+
+                <div className="text-center">
+                    <p className="text-sm font-mono text-accent uppercase tracking-widest">SPG</p>
+                    <p className="text-xs text-muted mt-1">Aeronautical Engineering</p>
+                </div>
+            </div>
+
+            {/* Bottom glass card */}
+            <div className="absolute bottom-6 left-6 right-6">
+                <div className="glass-card rounded-xl p-4">
+                    <div className="text-xs font-mono text-muted uppercase tracking-widest mb-1">Status</div>
+                    <div className="text-sm text-foreground font-medium">Building the future of flight &amp; code</div>
+                    <div className="mt-2 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_1px_rgba(52,211,153,0.6)]" />
+                        <span className="text-[10px] font-mono text-muted uppercase tracking-wider">Available now</span>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    )
+}
+
 export default function About() {
     const sectionRef = useRef<HTMLElement>(null)
     const { scrollYProgress } = useScroll({
@@ -133,27 +224,8 @@ export default function About() {
 
                 {/* Story Chapters */}
                 <div className="grid md:grid-cols-2 gap-x-24 gap-y-20">
-                    {/* Left — visual placeholder */}
-                    <motion.div
-                        className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-subtle border border-border hidden md:block"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-accent-warm/5" />
-                        <div className="absolute bottom-6 left-6 right-6">
-                            <div className="glass rounded-xl p-4">
-                                <div className="text-xs font-mono text-muted uppercase tracking-widest mb-1">Status</div>
-                                <div className="text-sm text-foreground font-medium">Building the future of flight & code</div>
-                            </div>
-                        </div>
-                        {/* Grid pattern */}
-                        <div className="absolute inset-0 opacity-10" style={{
-                            backgroundImage: 'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)',
-                            backgroundSize: '40px 40px',
-                        }} />
-                    </motion.div>
+                    {/* Left — 3D tilt card */}
+                    <TiltCard />
 
                     {/* Right — chapters */}
                     <div className="flex flex-col gap-16 md:gap-20 md:py-12">
@@ -176,3 +248,4 @@ export default function About() {
         </section>
     )
 }
+
