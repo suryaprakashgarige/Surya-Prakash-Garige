@@ -197,3 +197,58 @@ html.lenis body {
   z-index: 9998;
   transform-origin: left;
 }
+
+/* Hero grid overlay — subtle perspective lines */
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Glowing border */
+.glow-border {
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.25),
+    0 0 20px -4px rgba(59, 130, 246, 0.3),
+    inset 0 0 20px -10px rgba(59, 130, 246, 0.05);
+}
+
+/* Accent glow button shadow */
+.btn-glow {
+  box-shadow: 0 0 30px -6px var(--accent), 0 4px 15px -3px rgba(0, 0, 0, 0.5);
+}
+.btn-glow:hover {
+  box-shadow: 0 0 50px -4px var(--accent), 0 8px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
+/* Glassmorphism card — enhanced */
+.glass-card {
+  background: rgba(13, 13, 13, 0.55);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Shimmering text gradient animation */
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.text-gradient-animated {
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover), #a78bfa, var(--accent));
+  background-size: 300% 300%;
+  animation: shimmer 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Dot grid pattern */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
