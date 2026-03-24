@@ -99,7 +99,7 @@ export const personalInfo = {
     "Video Editing",
   ],
   socials: {
-    github: "https://github.com/suryaprakashgarige-28",
+    github: "https://github.com/suryaprakashgarige",
     linkedin: "https://www.linkedin.com/in/surya-prakash-garige/",
     email: "mailto:suryaprakashgarige009@gmail.com",
     emailText: "suryaprakashgarige009@gmail.com",

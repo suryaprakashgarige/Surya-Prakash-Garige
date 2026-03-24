@@ -8,8 +8,8 @@ const SOCIALS = [
     {
         name: 'GitHub',
         icon: Github,
-        href: 'https://github.com/suryaprakashgarige-28',
-        handle: '@suryaprakashgarige-28',
+        href: 'https://github.com/suryaprakashgarige',
+        handle: '@suryaprakashgarige',
     },
     {
         name: 'LinkedIn',

@@ -131,7 +131,7 @@ export default function Hero() {
 
                     <div className="flex items-center gap-3">
                         {[
-                            { icon: Github, href: 'https://github.com/suryaprakashgarige-28', label: 'GitHub' },
+                            { icon: Github, href: 'https://github.com/suryaprakashgarige', label: 'GitHub' },
                             { icon: Linkedin, href: 'https://www.linkedin.com/in/surya-prakash-garige/', label: 'LinkedIn' },
                             { icon: Mail, href: 'mailto:suryaprakashgarige009@gmail.com', label: 'Email' },
                         ].map(({ icon: Icon, href, label }) => (
