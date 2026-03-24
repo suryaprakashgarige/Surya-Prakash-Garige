@@ -1,19 +1,29 @@
 import type { Metadata } from "next";
-import { Inter_Tight, Syne } from "next/font/google";
+import { Cormorant_Garamond, Outfit, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/smooth-scroll";
 
-const interTight = Inter_Tight({
+// Luxury serif font for display/headings
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  variable: "--font-inter-tight",
+  variable: "--font-display",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+// Modern, clean sans-serif for body text
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-sans",
   display: "swap",
 });
 
-const syne = Syne({
+// Mono font for technical details
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-mono",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -55,8 +65,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${interTight.variable} ${syne.variable}`}>
-      <body className="antialiased bg-background text-foreground">
+    <html lang="en" className={`${cormorant.variable} ${outfit.variable} ${jetbrainsMono.variable}`}>
+      <body className="antialiased bg-background text-foreground font-sans">
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

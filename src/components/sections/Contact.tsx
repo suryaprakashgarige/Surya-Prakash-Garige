@@ -120,7 +120,12 @@ export default function Contact() {
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
                         transition={{ duration: 0.8, delay: 0.3 }}
                     >
-                        <div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1, duration: 0.6 }}
+                        >
                             <label htmlFor="name" className="block text-xs font-mono uppercase tracking-widest text-muted mb-3">
                                 Name
                             </label>
@@ -131,11 +136,16 @@ export default function Contact() {
                                 required
                                 value={formState.name}
                                 onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
-                                className="w-full bg-transparent border-b border-border p-3 text-foreground focus:outline-none focus:border-accent transition-colors placeholder:text-muted/40"
+                                className="w-full bg-transparent border-b border-border p-3 text-foreground focus:outline-none focus:border-accent focus:border-b-2 transition-all duration-300 placeholder:text-muted/40"
                                 placeholder="Your name"
                             />
-                        </div>
-                        <div>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2, duration: 0.6 }}
+                        >
                             <label htmlFor="email" className="block text-xs font-mono uppercase tracking-widest text-muted mb-3">
                                 Email
                             </label>
@@ -146,11 +156,16 @@ export default function Contact() {
                                 required
                                 value={formState.email}
                                 onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
-                                className="w-full bg-transparent border-b border-border p-3 text-foreground focus:outline-none focus:border-accent transition-colors placeholder:text-muted/40"
+                                className="w-full bg-transparent border-b border-border p-3 text-foreground focus:outline-none focus:border-accent focus:border-b-2 transition-all duration-300 placeholder:text-muted/40"
                                 placeholder="your@email.com"
                             />
-                        </div>
-                        <div>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3, duration: 0.6 }}
+                        >
                             <label htmlFor="message" className="block text-xs font-mono uppercase tracking-widest text-muted mb-3">
                                 Message
                             </label>
@@ -161,21 +176,33 @@ export default function Contact() {
                                 required
                                 value={formState.message}
                                 onChange={(e) => setFormState((s) => ({ ...s, message: e.target.value }))}
-                                className="w-full bg-transparent border-b border-border p-3 text-foreground focus:outline-none focus:border-accent transition-colors resize-none placeholder:text-muted/40"
+                                className="w-full bg-transparent border-b border-border p-3 text-foreground focus:outline-none focus:border-accent focus:border-b-2 transition-all duration-300 resize-none placeholder:text-muted/40"
                                 placeholder="Tell me about your project..."
                             />
-                        </div>
+                        </motion.div>
 
                         <motion.button
                             type="submit"
                             disabled={isSubmitting}
-                            className="group relative w-full bg-foreground text-background font-semibold py-4 rounded-full flex items-center justify-center gap-2 overflow-hidden hover:scale-[1.01] active:scale-[0.99] transition-transform disabled:opacity-50"
-                            whileTap={{ scale: 0.98 }}
+                            className="group relative w-full bg-foreground text-background font-semibold py-4 rounded-full flex items-center justify-center gap-2 overflow-hidden hover:scale-[1.02] active:scale-[0.97] transition-transform disabled:opacity-50 shadow-lg shadow-foreground/20 hover:shadow-accent/30"
+                            whileTap={{ scale: 0.97 }}
+                            whileHover={{ boxShadow: '0 0 30px rgba(212, 175, 55, 0.4)' }}
                         >
                             <span className="relative z-10 flex items-center gap-2 text-sm tracking-wide">
-                                {submitted ? 'Message Sent ✓' : isSubmitting ? 'Sending...' : 'Send Message'}
+                                {submitted ? (
+                                    <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }}>Message Sent ✓</motion.span>
+                                ) : isSubmitting ? (
+                                    <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="inline-block">Sending...</motion.span>
+                                ) : (
+                                    'Send Message'
+                                )}
                                 {!submitted && !isSubmitting && (
-                                    <Send className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                    <motion.div
+                                        animate={{ y: [0, 2, 0] }}
+                                        transition={{ duration: 1.5, repeat: Infinity }}
+                                    >
+                                        <Send className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                    </motion.div>
                                 )}
                             </span>
                             <div className="absolute inset-0 bg-accent transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 ease-out" />
